@@ -1,3 +1,5 @@
+import modwall; modwall.check()
+
 import os
 import winreg
 import win32security

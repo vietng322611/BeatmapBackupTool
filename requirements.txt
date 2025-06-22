@@ -1,2 +1,2 @@
-win32security
+pywin32>=308
 tqdm>=4.66.5
