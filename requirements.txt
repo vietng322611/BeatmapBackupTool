@@ -1,0 +1,2 @@
+win32security
+tqdm>=4.66.5
