@@ -73,7 +73,7 @@ def compress(songs_folder: str, beatmaps: list[str], file_count: int) -> None:
     tasks: list[Thread] = []
     for i in range(file_count):
         file_out = f"Pack_#{i+1}.zip"
-        start_index = file_count*i
+        start_index = ratio*i
         t = Thread(target=compress_beatmaps, args=[
                                             songs_folder,
                                             beatmaps[start_index : start_index + ratio + 1],
