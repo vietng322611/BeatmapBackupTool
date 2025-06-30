@@ -4,6 +4,7 @@ import os
 import winreg
 import win32security
 import getpass
+import time
 
 from math import ceil
 from tqdm import tqdm
@@ -74,17 +75,28 @@ def compress(songs_folder: str, beatmaps: list[str], file_count: int) -> None:
     for i in range(file_count):
         file_out = f"Pack_#{i+1}.zip"
         start_index = ratio*i
-        t = Thread(target=compress_beatmaps, args=[
+        end_index = start_index + ratio + 1
+        if (i == file_count - 1):
+            end_index = len(beatmaps)
+        t = Thread(target=compress_beatmaps, daemon = True, args=[
                                             songs_folder,
-                                            beatmaps[start_index : start_index + ratio + 1],
+                                            beatmaps[start_index : end_index],
                                             file_out])
         t.start()
         tasks.append(t)
+
+    def has_live_threads(threads: list[Thread]) -> bool:
+        for thread in threads:
+            if thread.is_alive():
+                return True
+        return False
     
-    for task in tasks:
-        task.join()
-        
-    
+    try:
+        while has_live_threads(tasks):
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        exit(0)
+
 if __name__ == "__main__":
     songs_folder = get_beatmap_folder()
 
